@@ -16,7 +16,7 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const { data, isLoading, isError, error } = useQuery<
+  const { data, isLoading, isError, isSuccess, isFetching, error } = useQuery<
     MoviesHttpResponse,
     Error
   >({
@@ -31,10 +31,10 @@ export default function App() {
       toast.error(error.message);
     }
 
-    if (data && data.results.length === 0) {
+    if (isSuccess && !isFetching && data.results.length === 0) {
       toast.error(`No movies found for "${query}".`);
     }
-  }, [data, error, isError, query]);
+  }, [data, error, isError, isSuccess, isFetching, query]);
 
   const handleSearch = (newQuery: string) => {
     setQuery(newQuery);
